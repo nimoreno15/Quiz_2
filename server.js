@@ -1,10 +1,21 @@
+require('dotenv').config();
+
 const mongoose = require('mongoose');
 (express = require('express')), (app = express());
 
 const port = process.env.PORT || 3000;
 
+user = process.env.USERID
+pw = process.env.PW
+
+console.log(user)
+console.log(pw)
+
+uri = 'mongodb+srv://'+user+':'+pw+'@cluster0.f9d6o.gcp.mongodb.net/Activitiess'
+console.log(uri)
+
 mongoose.connect(
-  'mongodb+srv://newuser:123@cluster0.f9d6o.gcp.mongodb.net/Activitiess'
+  uri
 );
 
 // Create a Schema object
