@@ -1,40 +1,52 @@
-require('dotenv').config();
-
 const mongoose = require('mongoose');
-(express = require('express')), (app = express());
+
+const express = require('express')
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// require('dotenv').config();
 
 const port = process.env.PORT || 3000;
 
-user = process.env.USERID
-pw = process.env.PW
-
-console.log(user)
-console.log(pw)
-
-uri = 'mongodb+srv://'+user+':'+pw+'@cluster0.f9d6o.gcp.mongodb.net/Activitiess'
-console.log(uri)
-
-mongoose.connect(
-  uri
-);
+// user = process.env.USERID
+// pw = process.env.PW
+// console.log(user)
+// console.log(pw)
 
 // Create a Schema object
-const activitySchema = new mongoose.Schema({
-  activity: { type: String, required: true },
+const studentSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  studentid: { type: Number, required: true },
 });
 
 // This Activitry creates the collection called activitimodels
-const Activitymodel = mongoose.model('Activity', activitySchema);
+const Studentmodel = mongoose.model('Student', studentSchema);
+
+const record1 = new Studentmodel({
+  name: 'Rebecca',
+  studentid: 123456,
+});
 
 app.get('/', (req, res) => {
-  const task1 = new Activitymodel({
-    activity: 'activity 111',
-  });
+  res.sendFile(__dirname + "/form.html")
+});
 
-  Activitymodel.insertMany([task1]);
+app.post('/', async (req, res) => {
+  myuri = req.body.myuri
+  // console.log(myuri)
+
+  await mongoose.connect(myuri)
+    .then(() => {
+      console.log('Connected to the database!');
+    })
+
+  Studentmodel.insertMany([record1]);
 
   res.send(`<h1>Document  Added</h1>`);
 });
+
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
